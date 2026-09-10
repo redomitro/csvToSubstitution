@@ -1,4 +1,4 @@
-file "db/k6487-dev.db"{
+file "db/EXAMPLE.db"{
     pattern {SYSTEM, DEVICE, PORT}
             {"K6487", "Picometer", "L0"}
     pattern {AO_VAR, AO_DESC, AO_STR, AO_VAL, AO_EGU, AO_LINR, AO_ESLO, AO_EOFF}
