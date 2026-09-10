@@ -31,7 +31,7 @@ def main():
 
     # ingest arguments from command line
     parser = argparse.ArgumentParser(description="Munge CSV files into an EPICS compatible substitution file")
-    parser.add_argument("fname", nargs="*", help="Files to be munged")
+    parser.add_argument("FNAME", nargs="+", help="Files to be munged")
     parser.add_argument("-o", "--output", help="Output file. If unspecified, each fname munges into separate fname.substitutions", nargs='?')
     parser.add_argument("-d", "--database", help="Database files being substituted. Paths relative to IOC top. Default: db/fname.db for all input files", nargs="*") #Maybe change to paths relative to $(TOP)/db?
     args = parser.parse_args()
