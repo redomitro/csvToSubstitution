@@ -39,13 +39,13 @@ def main():
     # todo: error handling
 
     # munge CSVs
-    nFiles = len(args.fname)
+    nFiles = len(args.FNAME)
     dbs = []
     for i in range(nFiles):
         if(not args.database or i>=len(args(database))): #non-commutative logical or; inverting this causes an error
-            x = csvMunge(args.fname[i], f'db/{args.fname[i][:-4]}.db')
+            x = csvMunge(args.FNAME[i], f'db/{args.FNAME[i][:-4]}.db')
         else:
-            x = csvMunge(args.fname[i], args.database[i])
+            x = csvMunge(args.FNAME[i], args.database[i])
         dbs.append(x)
 
     # handle output
@@ -55,7 +55,7 @@ def main():
             outFile.write(outString)
     else:
         for i in range(nFiles):
-            outFile = open(f"{args.fname[i][:-4]}.substitutions", "w")
+            outFile = open(f"{args.FNAME[i][:-4]}.substitutions", "w")
             outFile.write(dbs[i])
             outFile.close()
 

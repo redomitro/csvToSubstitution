@@ -1,6 +1,7 @@
 Munge CSV files into an EPICS compatible substitution file
 
-usage: `csvToSubstitution [-h] [-o [OUTPUT]] [-d [DATABASE ...]] FNAME ...`
+usage: `./csvToSubstitution.py [-h] [-o [OUTPUT]] [-d [DATABASE ...]] FNAME ...`
+alternate: `python3 csvToSubstitution.py [-h] [-o [OUTPUT]] [-d [DATABASE ...]] FNAME ...`
 
 CSV formatting: Patterns are separated by an empty line. The line after an empty line is formatted as a pattern line.
 
