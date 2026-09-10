@@ -1,0 +1,16 @@
+SYSTEM,DEVICE,PORT,,,,,
+K6487,Picometer,L0,,,,,
+,,,,,,,
+AO_VAR,AO_DESC,AO_STR,AO_VAL,AO_EGU,AO_LINR,AO_ESLO,AO_EOFF
+VoltageRange,Set voltage range,SOUR:VOLT:RANGE,10,V,NO CONVERSION,,
+Voltage,Set source voltage,SOUR:VOLT,,V,NO CONVERSION,,
+Integration rate,Set integration time,SENS:CURR:NPLC,100,ms,SLOPE,20,0
+,,,,,,,
+BO_VAR,BO_DESC,BO_STR,BO_ZNAM,BO_ONAM,BO_VAL,,
+Source,Switch source on/off,SOUR:VOLT:STAT,OFF,ON,0,,
+Autozero,Switch autozero,SYST:AZER,OFF,ON,1,,
+CurrAutorange,Current autorange,CURR:AUTO,OFF,ON,1,,
+,,,,,,,
+BI_VAR,BI_DESC,BI_STR,BI_ZNAM,BI_ONAM,,,
+Autozero,Autozero status,SYST:AZER,OFF,ON,,,
+Source,Source status,SOUR:VOLT:STAT,OFF,ON,,,
