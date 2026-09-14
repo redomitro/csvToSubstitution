@@ -1,6 +1,6 @@
 Munge CSV files into an EPICS compatible substitution file
 
-usage: `./csvToSubstitution.py [-h] [-o [OUTPUT]] [-d [DATABASE ...]] FNAME ...`
+usage: `./csvToSubstitution.py [-h] [-f] [-o [OUTPUT]] [-d [DATABASE ...]] FNAME ...`
 
 alternate: `python3 csvToSubstitution.py [-h] [-o [OUTPUT]] [-d [DATABASE ...]] FNAME ...`
 
@@ -11,4 +11,5 @@ Dependencies:
 
 Limitations:
 - One db file per csv. It's simple enough to pass `*.csv` as the argument.
-- Currently no checking is implemented. Existing files will be silently overwritten.
+
+Please consult the output of the --help switch for additional information.
