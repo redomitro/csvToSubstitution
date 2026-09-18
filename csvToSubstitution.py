@@ -12,11 +12,11 @@ def lineMunge(line, index):
     if not index:
         # leading line of pattern: leading string is "    pattern {", elements are unquoted
         s = ', '.join(line.split(','))
-        return f"{4*" "}pattern {{{s}}}"
+        return f"{4*" "}pattern {{ {s} }}"
     else:
         # other lines: leading string is 12 spaces, elements are quoted
         s = ', '.join([f'\"{i}\"' for i in line.split(',')])
-        return f"{12*" "}{{{s}}}"
+        return f"{12*" "}{{ {s} }}"
 
 def patternMunge(pattern):
     return "\n".join([lineMunge(pattern[i], i) for i in range(len(pattern))]) # munges each pattern line and joins them into a string
@@ -44,7 +44,7 @@ def main():
     outputFiles = [args.output] if args.output else [f"{i}.substitutions" for i in fnameBases]
     if (not args.force and any([os.path.exists(i) for i in outputFiles])):
         print(
-            f"Error: File '{[i for i in outputFiles if os.path.exists(i)][0]}' already exists in the current directory.",
+            f"Error: File '{[i for i in outputFiles if os.path.exists(i)][0]}' already exists in the current directory. Pass -f to overwrite.",
             file=sys.stderr,
         )
         sys.exit(1)
