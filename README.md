@@ -1,15 +1,17 @@
-Munge CSV files into an EPICS compatible substitution file
+Munge CSV files into an EPICS compatible substitution file. Compatible both with compile-time expansion with MSI and run-time expansion with dbLoadTemplate.
 
-usage: `./csvToSubstitution.py [-h] [-f] [-o [OUTPUT]] [-d [DATABASE ...]] FNAME ...`
+usage: `./csvToSubstitution [-hqf] [-o OUTPUT] FNAME ...`
 
-alternate: `python3 csvToSubstitution.py [-h] [-f] [-o [OUTPUT]] [-d [DATABASE ...]] FNAME ...`
-
-CSV formatting: Patterns are separated by an empty line (all commas). The line after an empty line is formatted as a pattern line. See the example files for guidance.
+Formatting:
+- Separate files by an empty line
+- The first line after an empty line is the file being substituted. For compile-time expansion, the path is relative to the directory containing the substitution file. For run-time expansion it's relative to IOC top.
+- The second line after an empty line is the pattern.
+- The remaining lines until an all-commas line is found are substitution lines.
+- Comment lines with `#`. **Warning**: Commenting out the first or second line after an all-commas line will cause the munging to fail. Fix coming in future update.
 
 Dependencies:
 - Python 3
 
-Limitations:
-- One db file per csv. It's simple enough to pass `*.csv` as the argument.
+Portable use: Drop the file into a location recognised by PATH.
 
 Please consult the output of the --help switch for additional information.

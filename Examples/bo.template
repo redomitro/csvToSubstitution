@@ -1,0 +1,8 @@
+record(bo,  "$(SYSTEM):$(DEVICE):$(BO_VAR):Put"){
+    field(DESC, "$(BO_DESC)")
+    field(DTYP, "stream")
+    field(OUT,  "@k6487.proto PutString($(BO_STR)) $(PORT)")
+    field(VAL,  "$(BO_VAL)")
+    field(ZNAM, "$(BO_ZNAM)")
+    field(ONAM, "$(BO_ONAM)")
+}

@@ -1,0 +1,5 @@
+db/EXAMPLE.db
+SYSTEM,DEVICE,PORT
+Beamline0,Picometer,L0
+Beamline1,Picometer,L1
+Beamline2,Picometer,L2

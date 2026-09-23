@@ -1,0 +1,11 @@
+record(ao, "$(SYSTEM):$(DEVICE):$(AO_VAR):Put"){
+    field(DESC, "$(AO_DESC)")
+    field(DTYP, "stream")
+    field(OUT,  "@k6487.proto PutFloat($(AO_STR)) $(PORT)")
+    field(VAL,  "$(AO_VAL)")
+    field(PREC, "$(AO_PREC)")
+    field(EGU,  "$(AO_EGU)")
+    field(LINR, "$(AO_LINR)")
+    field(ESLO, "$(AO_ESLO)")
+    field(EOFF, "$(AO_EOFF)")
+}

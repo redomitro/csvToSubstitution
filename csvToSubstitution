@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import argparse, os, sys
+import argparse, os, sys, re
 
 def listSplit(array, separator):
     # split an array based on a separator element - replicating string.split for arrays
@@ -8,24 +8,29 @@ def listSplit(array, separator):
     slicedArray = [array[1+splitIndices[i]:splitIndices[i+1]] for i in range(len(splitIndices)-1)]
     return slicedArray
 
-def lineMunge(line, index):
+def lineMunge(line, index, length):
+    if line[0]=="#":
+        return f"{12*" "}{line}"
     if not index:
         # leading line of pattern: leading string is "    pattern {", elements are unquoted
-        s = ', '.join(line.split(','))
+        s = ', '.join(line.split(',')[:length])
         return f"{4*" "}pattern {{ {s} }}"
     else:
-        # other lines: leading string is 12 spaces, elements are quoted
-        s = ', '.join([f'\"{i}\"' for i in line.split(',')])
+        # other lines: leading string is 12 spaces, elements are optionally quoted
+        s = ', '.join([(f'\"{i}\"' if(not len(i) or args.quotes or re.search(r'\s', i)) else i) for i in line.split(',')[:length]])
         return f"{12*" "}{{ {s} }}"
 
 def patternMunge(pattern):
-    return "\n".join([lineMunge(pattern[i], i) for i in range(len(pattern))]) # munges each pattern line and joins them into a string
+    leading = f"file \"{pattern[0].rstrip(',')}\" {{"
+    trailing = "}"
+    pattLength = len(pattern[1].rstrip(',').split(','))
+    return "\n".join([leading] + [lineMunge(pattern[i], i-1, pattLength) for i in range(1, len(pattern))] + [trailing]) # munges each pattern line and joins them into a string
 
-def csvMunge(fname, dbname):
-    dbLeading = f"file \"{dbname}\"" # placeholder for readability
-    lines = [i.strip(',') for i in open(fname).read().split("\n")] # strip all lines of trailing commas
+def csvMunge(fname):
+    with open(fname, "r") as inFile:
+        lines = [i.lstrip(',') for i in inFile.read().split("\n")] # strip all lines of leading commas to detect empty lines
     patterns = [patternMunge(i) for i in listSplit(lines, '')]
-    return f"{dbLeading}{{\n{'\n'.join(patterns)}\n}}"
+    return '\n\n'.join(patterns)
 
 def main():
 
@@ -33,12 +38,13 @@ def main():
     parser = argparse.ArgumentParser(description="Munge CSV files into an EPICS compatible substitution file")
     parser.add_argument("FNAME", nargs="+", help="Files to be munged")
     parser.add_argument("-f", "--force", help="Overwrite existing files. If unspecified, attempting to output to an existing file throws an error.", action="store_true")
+    parser.add_argument("-q", "--quotes", help="Surround substitutes in quotes. Empty elements and elements with whitespace will always be quoted.", action="store_true")
     parser.add_argument("-o", "--output", help="Output file. If unspecified, each fname munges into separate fname.substitutions", nargs='?')
-    parser.add_argument("-d", "--database", help="Database files being substituted. Paths relative to IOC top. Default: db/fname.db for all input files", nargs="*") #Maybe change to paths relative to $(TOP)/db?
+    global args
     args = parser.parse_args()
 
     nFiles = len(args.FNAME)
-    fnameBases = [(i[:-4] if i.endswith('.csv') else i) for i in args.FNAME]
+    fnameBases = [(i.split('.')[-2] if '.' in i else i) for i in args.FNAME]
 
     # handle existing files
     outputFiles = [args.output] if args.output else [f"{i}.substitutions" for i in fnameBases]
@@ -50,13 +56,7 @@ def main():
         sys.exit(1)
 
     # munge CSVs
-    dbs = []
-    for i in range(nFiles):
-        if(not args.database or i>=len(args(database))): #non-commutative logical or; inverting this causes an error
-            x = csvMunge(args.FNAME[i], f'db/{fnameBases[i]}.db')
-        else:
-            x = csvMunge(args.FNAME[i], args.database[i])
-        dbs.append(x)
+    dbs = [csvMunge(i) for i in args.FNAME]
 
     # handle output
     if args.output:

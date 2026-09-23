@@ -1,0 +1,7 @@
+record(bi,  "$(SYSTEM):$(DEVICE):$(BI_VAR):Get"){
+    field(DESC, "$(BI_DESC)")
+    field(DTYP, "stream")
+    field(INP,  "@k6487.proto GetString($(BI_STR)) $(PORT)")
+    field(ZNAM, "$(BI_ZNAM)")
+    field(ONAM, "$(BI_ONAM)")
+}
