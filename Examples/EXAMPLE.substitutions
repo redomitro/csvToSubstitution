@@ -17,3 +17,7 @@ file "bi.template" {
             { Autozero, "Autozero status", SYST:AZER, OFF, ON }
             { Source, "Source status", SOUR:VOLT:STAT, OFF, ON }
 }
+
+file "misc.template" {
+            {}
+}

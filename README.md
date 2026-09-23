@@ -7,7 +7,7 @@ Formatting:
 - The first line after an empty line is the file being substituted. For compile-time expansion, the path is relative to the directory containing the substitution file. For run-time expansion it's relative to IOC top.
 - The second line after an empty line is the pattern.
 - The remaining lines until an all-commas line is found are substitution lines.
-- Comment lines with `#`. **Warning**: Commenting out the first or second line after an all-commas line will cause the munging to fail. Fix coming in future update.
+- Comment lines with `#`.
 
 Dependencies:
 - Python 3

@@ -2,6 +2,9 @@
 
 import argparse, os, sys, re
 
+def forceQuote(string):
+    return (args.quotes or not len(string) or re.search(r'\s', string))
+
 def listSplit(array, separator):
     # split an array based on a separator element - replicating string.split for arrays
     splitIndices = [-1]+[i for i in range(len(array)) if array[i]==separator] # define slice points
@@ -9,28 +12,33 @@ def listSplit(array, separator):
     return slicedArray
 
 def lineMunge(line, index, length):
-    if line[0]=="#":
-        return f"{12*" "}{line}"
     if not index:
         # leading line of pattern: leading string is "    pattern {", elements are unquoted
         s = ', '.join(line.split(',')[:length])
         return f"{4*" "}pattern {{ {s} }}"
     else:
         # other lines: leading string is 12 spaces, elements are optionally quoted
-        s = ', '.join([(f'\"{i}\"' if(not len(i) or args.quotes or re.search(r'\s', i)) else i) for i in line.split(',')[:length]])
+        s = ', '.join([(f'\"{i}\"' if forceQuote(i) else i) for i in line.split(',')[:length]])
         return f"{12*" "}{{ {s} }}"
 
 def patternMunge(pattern):
-    leading = f"file \"{pattern[0].rstrip(',')}\" {{"
-    trailing = "}"
-    pattLength = len(pattern[1].rstrip(',').split(','))
-    return "\n".join([leading] + [lineMunge(pattern[i], i-1, pattLength) for i in range(1, len(pattern))] + [trailing]) # munges each pattern line and joins them into a string
+
+    leading = [f"file \"{pattern[0].rstrip(',')}\" {{"]
+    trailing = ["}"]
+    if(len(pattern) == 1):
+        #Empty pattern case to include a file with no substitutions
+        content = [f'{12*" "}{{}}']
+    else:
+        pattLength = len(pattern[1].rstrip(',').split(','))
+        content = [lineMunge(pattern[i], i-1, pattLength) for i in range(1, len(pattern))]
+    return "\n".join(leading + content + trailing) # munges each pattern line and joins them into a string
 
 def csvMunge(fname):
     with open(fname, "r") as inFile:
-        lines = [i.lstrip(',') for i in inFile.read().split("\n")] # strip all lines of leading commas to detect empty lines
+        # strip all lines of leading commas to detect empty lines
+        lines = [i.lstrip(',') for i in inFile.read().split("\n") if not (len(i) and i[0]=="#")] #ignore nonempty lines starting with #
     patterns = [patternMunge(i) for i in listSplit(lines, '')]
-    return '\n\n'.join(patterns)
+    return "\n\n".join(patterns)
 
 def main():
 
